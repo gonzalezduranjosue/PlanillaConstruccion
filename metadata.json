@@ -1,0 +1,5 @@
+{
+  "name": "BudgetPro - Generador de Presupuestos",
+  "description": "Una versión moderna, reactiva y escalable de la planilla de presupuestos. Migrada de HTML/JS Vanilla a React + TypeScript para mejor manejo de estado, cálculos en tiempo real y UI profesional con Tailwind CSS.",
+  "requestFramePermissions": []
+}
