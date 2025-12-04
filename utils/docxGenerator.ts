@@ -66,16 +66,24 @@ export const generateWordDocument = async (state: BudgetState, lang: 'es' | 'en'
   };
 
   const headerText = (text: string) => new Paragraph({
-    text: text,
-    bold: true,
-    size: 20, // 10pt
-    color: "FFFFFF"
+    children: [
+        new TextRun({
+            text: text,
+            bold: true,
+            size: 20, // 10pt
+            color: "FFFFFF"
+        })
+    ]
   });
 
   const cellText = (text: string, bold = false) => new Paragraph({
-    text: text,
-    bold: bold,
-    size: 20 // 10pt
+    children: [
+        new TextRun({
+            text: text,
+            bold: bold,
+            size: 20 // 10pt
+        })
+    ]
   });
 
   const doc = new Document({
@@ -249,7 +257,12 @@ export const generateWordDocument = async (state: BudgetState, lang: 'es' | 'en'
 
         // Observations
         ...(state.signatures.observations ? [
-            new Paragraph({ text: "Observaciones:", bold: true, spacing: { before: 400, after: 120 } }),
+            new Paragraph({ 
+                children: [
+                    new TextRun({ text: "Observaciones:", bold: true })
+                ], 
+                spacing: { before: 400, after: 120 } 
+            }),
             new Paragraph({ text: state.signatures.observations })
         ] : [])
       ]
@@ -259,7 +272,14 @@ export const generateWordDocument = async (state: BudgetState, lang: 'es' | 'en'
   const blob = await Packer.toBlob(doc);
   const fileName = `${state.projectInfo.projectName.replace(/\s+/g, '_') || 'Presupuesto'}_${lang}.docx`;
   
-  // Handle file-saver export (default vs named)
-  const saveAs = (FileSaver as any).saveAs || FileSaver;
-  saveAs(blob, fileName);
+  // Robust import handling for file-saver in browser/module environments
+  // This fixes "The requested module does not provide an export named 'saveAs'"
+  const saveAs = (FileSaver as any).saveAs || (FileSaver as any).default?.saveAs || FileSaver;
+  
+  if (typeof saveAs === 'function') {
+      saveAs(blob, fileName);
+  } else {
+      console.error('FileSaver saveAs is not a function', FileSaver);
+      alert('Error al guardar el archivo. Por favor intente nuevamente.');
+  }
 };
