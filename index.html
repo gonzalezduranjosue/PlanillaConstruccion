@@ -3,45 +3,101 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BudgetPro | Generador de Presupuestos</title>
+    
+    <!-- SEO Principal -->
+    <title>BudgetPro | Generador de Presupuestos de Obra Gratis</title>
+    <meta name="description" content="Calculadora de presupuestos de construcción gratuita. Crea planillas de materiales, mano de obra y albañilería. Exporta a Word y PDF." />
+    <meta name="keywords" content="presupuesto obra, calculadora construcción, albañilería, materiales, costos" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="BudgetPro" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="BudgetPro | Generador de Presupuestos" />
+    <meta property="og:description" content="Calculadora de costos de construcción gratuita." />
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "BudgetPro",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0" }
+    }
+    </script>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-            },
+            fontFamily: { sans: ['Inter', 'sans-serif'] },
             colors: {
               brand: {
-                50: '#f0f9ff',
-                100: '#e0f2fe',
-                500: '#0ea5e9',
-                600: '#0284c7',
-                700: '#0369a1',
-                900: '#0c4a6e',
+                50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e',
               }
             }
           }
         }
       }
     </script>
-  <script type="importmap">
+
+    <!-- Import Map Optimizado (ESM.sh) -->
+    <script type="importmap">
 {
   "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "docx": "https://aistudiocdn.com/docx@^9.5.1",
-    "file-saver": "https://aistudiocdn.com/file-saver@^2.0.5"
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.292.0",
+    "docx": "https://esm.sh/docx@8.5.0",
+    "file-saver": "https://esm.sh/file-saver@2.0.5",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/"
   }
 }
 </script>
-</head>
+    
+    <!-- Babel Standalone (Optimized) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
   <body class="bg-slate-50 text-slate-800">
-    <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
+    <div id="root">
+        <!-- Loader Visual -->
+        <div id="loader" style="padding: 40px; text-align: center; color: #475569; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50vh;">
+            <div style="margin-bottom: 20px;">
+                <svg style="width: 50px; height: 50px; color: #0284c7; animation: spin 1s linear infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle style="opacity: 0.25;" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path style="opacity: 0.75;" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <style>@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }</style>
+            </div>
+            <h1 style="color: #0f172a; font-size: 24px; font-weight: 700; margin-bottom: 10px;">Iniciando BudgetPro...</h1>
+            <p>Cargando módulos...</p>
+        </div>
+        
+        <!-- Error Container (Hidden by default) -->
+        <div id="error-container" style="display: none; padding: 40px; text-align: center; color: #dc2626; font-family: sans-serif;">
+            <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">Ocurrió un error al cargar</h2>
+            <p id="error-message" style="margin-bottom: 20px;">No se pudo iniciar la aplicación.</p>
+            <button onclick="window.location.reload()" style="padding: 10px 20px; background: #0284c7; color: white; border: none; border-radius: 5px; cursor: pointer;">Recargar Página</button>
+        </div>
+    </div>
+
+    <!-- Error Handler Script -->
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('error-container').style.display = 'block';
+            document.getElementById('error-message').textContent = message || "Error desconocido de conexión o script.";
+            console.error("BudgetPro Error:", error);
+        };
+    </script>
+    
+    <!-- App Entry Point -->
+    <script type="text/babel" data-type="module" data-presets="typescript,react" src="./index.tsx"></script>
   </body>
 </html>
